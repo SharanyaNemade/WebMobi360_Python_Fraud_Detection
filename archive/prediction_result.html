@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔐 Fraud Prediction Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d4fc79, #96e6a1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Glass card */
+        .container {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(18px);
+            border-radius: 25px;
+            padding: 40px;
+            width: 95%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        h2 {
+            color: #008037;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .result {
+            font-size: 20px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .low { background-color: rgba(144, 238, 144,0.7); color: #006400; }       /* green */
+        .medium { background-color: rgba(255, 165, 0,0.7); color: #8B4500; }     /* orange */
+        .high { background-color: rgba(255, 99, 71,0.7); color: #8B0000; }       /* red */
+
+        button {
+            margin-top: 25px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #009e60, #00c56e);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #00c56e, #009e60);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>🔐 Fraud Prediction Result</h2>
+
+        <!-- Result box (color depends on risk) -->
+        <div class="result {{ risk_class }}">
+            Fraud Probability: {{ fraud_prob }} <br>
+            Prediction: {{ prediction }}
+        </div>
+
+        <form action="/" method="get">
+            <button type="submit">Predict Another Transaction</button>
+        </form>
+    </div>
+</body>
+</html>

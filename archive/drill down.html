@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drill-Down Analysis Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .transaction-list {
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    .transaction {
+      padding: 15px 20px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .transaction:hover {
+      background-color: #f3f4f6;
+    }
+
+    .status-high { color: #dc2626; font-weight: bold; }
+    .status-medium { color: #b45309; font-weight: bold; }
+    .status-low { color: #065f46; font-weight: bold; }
+
+    .drilldown-panel {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .drilldown-panel h3 {
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .drilldown-panel p {
+      margin: 5px 0;
+      color: #374151;
+    }
+
+  </style>
+</head>
+<body>
+
+<h2>Flagged Transactions</h2>
+
+<div class="transaction-list">
+  <div class="transaction" onclick="showDetails('TX101')">
+    <span>TX101</span>
+    <span class="status-high">High 🟥</span>
+  </div>
+  <div class="transaction" onclick="showDetails('TX102')">
+    <span>TX102</span>
+    <span class="status-medium">Medium 🟧</span>
+  </div>
+  <div class="transaction" onclick="showDetails('TX103')">
+    <span>TX103</span>
+    <span class="status-high">High 🟥</span>
+  </div>
+</div>
+
+<div class="drilldown-panel" id="drilldown">
+  <h3>Transaction Details</h3>
+  <p><strong>Transaction ID:</strong> <span id="txId"></span></p>
+  <p><strong>User:</strong> <span id="user"></span></p>
+  <p><strong>Amount:</strong> ₹<span id="amount"></span></p>
+  <p><strong>IP Address:</strong> <span id="ip"></span></p>
+  <p><strong>Device:</strong> <span id="device"></span></p>
+  <p><strong>Location:</strong> <span id="location"></span></p>
+  <p><strong>Past Suspicious Transactions:</strong> <span id="past"></span></p>
+  <p><strong>Notes:</strong> <span id="notes"></span></p>
+</div>
+
+<script>
+const transactions = {
+  'TX101': {
+    user: 'Ramyasree',
+    amount: '1,50,000',
+    ip: '192.168.1.101',
+    device: 'iPhone 14',
+    location: 'Germany',
+    past: 2,
+    notes: 'Rapid location change'
+  },
+  'TX102': {
+    user: 'Vikram',
+    amount: '45,000',
+    ip: '192.168.1.205',
+    device: 'Samsung Galaxy',
+    location: 'Delhi',
+    past: 1,
+    notes: 'Multiple login failures'
+  },
+  'TX103': {
+    user: 'Ananya',
+    amount: '2,00,000',
+    ip: '192.168.1.99',
+    device: 'Laptop Windows',
+    location: 'Mumbai',
+    past: 3,
+    notes: 'Unusual large transaction'
+  }
+};
+
+function showDetails(txId) {
+  const tx = transactions[txId];
+  document.getElementById('drilldown').style.display = 'block';
+  document.getElementById('txId').innerText = txId;
+  document.getElementById('user').innerText = tx.user;
+  document.getElementById('amount').innerText = tx.amount;
+  document.getElementById('ip').innerText = tx.ip;
+  document.getElementById('device').innerText = tx.device;
+  document.getElementById('location').innerText = tx.location;
+  document.getElementById('past').innerText = tx.past;
+  document.getElementById('notes').innerText = tx.notes;
+}
+</script>
+
+</body>
+</html>

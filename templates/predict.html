@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction</title>
+
+<style>
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {
+        font-family:'Poppins', sans-serif;
+        background:#e7fff0;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
+    .box {
+        background:white;
+        padding:30px;
+        width:90%;
+        max-width:450px;
+        text-align:center;
+        border-radius:20px;
+        box-shadow:0 0 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+        color:#00672b;
+        margin-bottom:15px;
+    }
+    .fraud {
+        color:#c20000;
+        font-size:20px;
+        font-weight:600;
+    }
+    .safe {
+        color:#008037;
+        font-size:20px;
+        font-weight:600;
+    }
+    .progress {
+        width:100%;
+        height:18px;
+        background:#ddd;
+        border-radius:10px;
+        margin:20px 0;
+    }
+    .progress-bar {
+        height:100%;
+        background:#ff0000;
+        border-radius:10px;
+    }
+    a {
+        text-decoration:none;
+        background:#1d4ed8;
+        color:white;
+        padding:10px 18px;
+        border-radius:10px;
+        display:inline-block;
+        margin-top:10px;
+    }
+
+
+       .back-btn {
+            padding: 10px 18px;
+            background: #0078ff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background:#005fcc;
+            transform: scale(1.05);
+        }
+
+    .progress {
+    width: 100%;
+    max-width: 500px;
+    height: 18px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+
+
+    .progress-bar.low { background: #22c55e; }
+.progress-bar.medium { background: #facc15; }
+.progress-bar.high { background: #ef4444; }
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h1>Fraud Prediction Result</h1>
+    {% if prediction == "Fraud" %}
+<div class="fraud-reasons">
+    <h3>⚠ Fraud Reasons</h3>
+    <ul>
+        {% for reason in fraud_reasons %}
+        <li>{{ reason }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+    {% if prediction == 'Fraud' and FraudRiskScore|float >= 70 %}
+    <p class="fraud">⚠ Fraud Detected!</p>
+
+{% elif prediction == 'Fraud' and FraudRiskScore|float >= 60 %}
+    <p class="fraud">⚠ Fraud Review Needed!</p>
+    <p class="safe">✔ Safe Transaction</p>
+
+{% else %}
+    <p class="safe">✔ Safe Transaction</p>
+{% endif %}
+
+    <p><strong></strong></p>
+    <p><strong>Fraud Risk Score: {{ FraudRiskScore }}%</strong></p>
+    <p><strong>Fraud risk: {{ risk_class }}%</strong></p>
+
+
+<div class="progress">
+    <div class="progress-bar
+        {% if FraudRiskScore|float < 30 %}
+            low
+        {% elif FraudRiskScore|float < 70 %}
+            medium
+        {% else %}
+            high
+        {% endif %}"
+        style="width: {{ FraudRiskScore|float }}%;">
+    </div>
+</div>
+
+
+ <button class="back-btn" onclick="window.history.back()">⬅ Back</button></div>
+</body>
+</html>

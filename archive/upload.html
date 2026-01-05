@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Data | Fraud Detection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef3ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #003c8f;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .card input, .card select {
+            width: 95%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 15px;
+        }
+
+        .btn-upload {
+            background: #0059ff;
+        }
+
+        .btn-upload:hover {
+            background: #0042c4;
+        }
+
+        .btn-predict {
+            background: #1e9b2b;
+        }
+
+        .btn-predict:hover {
+            background: #15721f;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Upload Transaction Data</h2>
+
+    <!-- CSV Upload Section -->
+    <div class="card">
+        <h3>Upload CSV File</h3>
+        <input type="file" accept=".csv">
+        <button class="btn btn-upload">Upload CSV</button>
+    </div>
+
+    <!-- Manual Input Section -->
+    <div class="card">
+        <h3>Enter Transaction Manually</h3>
+        <form action="/predict_manual" method="POST">
+            <input type="number" name="step" placeholder="Step" required>
+
+            <select name="type" required>
+                <option value="">Select Transaction Type</option>
+                <option value="PAYMENT">PAYMENT</option>
+                <option value="TRANSFER">TRANSFER</option>
+                <option value="CASH_OUT">CASH_OUT</option>
+                <option value="DEBIT">DEBIT</option>
+                <option value="CASH_IN">CASH_IN</option>
+            </select>
+
+            <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+            <input type="number" step="0.01" name="oldbalanceOrg" placeholder="Old Balance Origin" required>
+            <input type="number" step="0.01" name="newbalanceOrig" placeholder="New Balance Origin" required>
+            <input type="number" step="0.01" name="oldbalanceDest" placeholder="Old Balance Destination" required>
+            <input type="number" step="0.01" name="newbalanceDest" placeholder="New Balance Destination" required>
+
+            <button type="submit" class="btn btn-predict">Predict Fraud</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

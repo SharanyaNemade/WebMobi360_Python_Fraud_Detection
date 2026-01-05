@@ -1,0 +1,26 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+env/
+
+# IDE / Editor files
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+
+# Local databases
+*.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Model artifacts (optional – read note below)
+*.pkl

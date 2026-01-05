@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraud Detection System</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #eef4fc;
+    }
+    nav {
+        background: #003c8f;
+        padding: 15px 40px;
+        color: white;
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 16px;
+    }
+    nav a:hover {
+        color: #ffea00;
+    }
+    .hero {
+        text-align: center;
+        padding: 70px 20px;
+    }
+    .hero h1 {
+        font-size: 40px;
+        color: #002c6e;
+        margin-bottom: 10px;
+    }
+    .hero p {
+        color: #444;
+        font-size: 18px;
+    }
+    .cards {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin: 40px;
+    }
+    .card {
+        width: 280px;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        text-align: center;
+        transition: 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+    }
+    .card h3 {
+        color: #003c8f;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .card p {
+        color: #555;
+        font-size: 14px;
+    }
+</style>
+
+</head>
+<body>
+
+<nav>
+    Fraud Detection System
+    <div>
+        <a href="/history">History</a>
+        <a href="/manual">Manual Prediction</a>
+        <a href="/upload_csv">Upload CSV</a>
+        <a href="/analysis">Predictive analysis</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Detect Fraud in Real-Time</h1>
+    <p>Analyze transactions, reduce losses & prevent risks instantly</p>
+</section>
+
+<div class="cards">
+
+    <a href="/manual" style="text-decoration:none;">
+    <div class="card">
+        <h3>Manual Check</h3>
+        <p>Enter transaction details & detect fraud</p>
+    </div>
+</a>
+
+    <a href="/upload_csv" style="text-decoration:none;">
+    <div class="card">
+        <h3>Upload CSV</h3>
+        <p>Batch analysis for multiple records</p>
+    </div>
+    </a>
+    <a href="/live" style="text-decoration:none;">
+    <div class="card">
+        <h3>Live Stream</h3>
+        <p>Real-time monitoring and alerts</p>
+    </div>
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Transaction Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+}
+
+.header {
+    background: linear-gradient(90deg, #1e40af, #2563eb);
+    color: #fff;
+    padding: 18px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 28px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+thead {
+    background: #e0e7ff;
+}
+
+th, td {
+    padding: 14px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.fraud {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.safe {
+    color: #16a34a;
+    font-weight: 600;
+}
+    .back-btn {
+    background: #fff;
+    color: #2563eb;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+</style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h2>📄 User Transactions: {{ user_id }}</h2>
+    <button class="back-btn" onclick="window.history.back()">⬅ Back</button>
+</div>
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:24px; margin-bottom:30px;">
+
+
+
+    <div style="background:#fff; padding:22px; border-radius:16px; box-shadow:0 8px 20px rgba(0,0,0,0.08); margin-bottom:30px;">
+    <h4>📊 Risk Score vs Transaction Amount</h4>
+    <canvas id="riskAmountTrend" height="120"></canvas>
+</div>
+</div>
+
+<div class="container">
+
+{% if not history %}
+    <p>No transactions found for this user.</p>
+{% else %}
+<table>
+    <thead>
+        <tr>
+            <th>Txn ID</th>
+            <th>Timestamp</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Receiver</th>
+            <th>Risk Score</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tx in history %}
+        <tr>
+            <td>{{ tx.TransactionID }}</td>
+            <td>{{ tx.Timestamp }}</td>
+            <td>{{ tx.Amount }}</td>
+            <td>{{ tx.TransactionType }}</td>
+            <td>{{ tx.ReceiverID }}</td>
+            <td>{{ tx.FraudRiskScore }}</td>
+            <td class="{{ 'fraud' if tx.IsFraud == '1' else 'safe' }}">
+                {{ 'Fraud' if tx.IsFraud == '1' else 'Safe' }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
+
+<script>
+const historyData = {{ history | tojson }};
+
+// Prepare data
+const labels = historyData.map(tx => tx.Timestamp);
+const transactionIds = historyData.map(tx => tx.TransactionID);
+const riskScores = historyData.map(tx => parseFloat(tx.FraudRiskScore));
+const amounts = historyData.map(tx => parseFloat(tx.Amount));
+
+// Combined chart
+new Chart(document.getElementById('riskAmountTrend'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Fraud Risk Score',
+                data: riskScores,
+                borderColor: '#dc2626',
+                backgroundColor: 'rgba(220,38,38,0.15)',
+                yAxisID: 'yRisk',
+                tension: 0.4,
+                fill: true
+            },
+            {
+                label: 'Transaction Amount',
+                data: amounts,
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37,99,235,0.12)',
+                yAxisID: 'yAmount',
+                tension: 0.4,
+                fill: true
+            }
+        ]
+    },
+    options: {
+    responsive: true,
+    interaction: {
+        mode: 'index',
+        intersect: false
+    },
+    plugins: {
+        tooltip: {
+            callbacks: {
+                title: function (tooltipItems) {
+                    const index = tooltipItems[0].dataIndex;
+                    return "Transaction ID: " + transactionIds[index];
+                },
+                label: function (context) {
+                    return context.dataset.label + ": " + context.formattedValue;
+                }
+            }
+        }
+    },
+    scales: {
+        yRisk: {
+            type: 'linear',
+            position: 'left',
+            title: {
+                display: true,
+                text: 'Fraud Risk Score'
+            },
+            min: 0,
+            max: 1
+        },
+        yAmount: {
+            type: 'linear',
+            position: 'right',
+            title: {
+                display: true,
+                text: 'Transaction Amount'
+            },
+            grid: {
+                drawOnChartArea: false
+            }
+        }
+    }
+}
+
+});
+</script>
+
+
+</body>
+</html>

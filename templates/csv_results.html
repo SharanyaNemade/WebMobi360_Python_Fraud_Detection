@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Prediction Results</title>
+<style>
+/* ===== Global ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    margin: 0;
+    padding: 20px;
+    color: #1f2937;
+}
+
+.container {
+    max-width: 1300px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 30px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* ===== Analysis Cards ===== */
+.analysis-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+}
+
+.card h4 {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.card.fraud p {
+    color: #dc2626;
+}
+
+.card.safe p {
+    color: #16a34a;
+}
+
+
+/* ===== Charts ===== */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.chart-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+.chart-card h4 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #374151;
+}
+
+.chart-card canvas {
+    max-height: 280px;
+}
+
+/* ===== Table ===== */
+.table-container {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+th {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: #ffffff;
+    padding: 14px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+}
+
+td {
+    padding: 12px;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+/* ===== Badges ===== */
+.fraud {
+    color: #991b1b;
+    background: #fee2e2;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.safe {
+    color: #065f46;
+    background: #d1fae5;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* ===== Mobile Cards ===== */
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        padding: 12px;
+    }
+
+    td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: none;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+    }
+}
+
+
+           /* ================= Top Bar ================= */
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+        .back-btn {
+    padding: 10px 18px;
+    background: linear-gradient(90deg, #42a5f5, #1e88e5);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.back-btn:hover {
+    background: linear-gradient(90deg, #1e88e5, #1565c0);
+    transform: translateY(-2px);
+}
+</style>
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const chartData = {{ chart_data | tojson }};
+
+    /* Fraud vs Safe */
+    new Chart(document.getElementById("fraudSafeChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["Fraud", "Safe"],
+            datasets: [{
+                data: chartData.fraud_vs_safe,
+                backgroundColor: ["#ef4444", "#22c55e"]
+            }]
+        }
+    });
+
+    /* Fraud by Type */
+    new Chart(document.getElementById("fraudTypeChart"), {
+        type: "bar",
+        data: {
+            labels: Object.keys(chartData.fraud_by_type),
+            datasets: [{
+                label: "Fraud Count",
+                data: Object.values(chartData.fraud_by_type),
+                backgroundColor: "#3b82f6"
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    /* Risk Score Distribution */
+    new Chart(document.getElementById("riskScoreChart"), {
+        type: "line",
+        data: {
+            labels: chartData.risk_scores.map((_, i) => i + 1),
+            datasets: [{
+                label: "Risk Score",
+                data: chartData.risk_scores,
+                borderColor: "#6366f1",
+                tension: 0.4,
+                fill: false
+            }]
+        }
+    });
+
+});
+</script>
+
+
+<body>
+
+<h2>Fraud Prediction Results</h2>
+<div class="top-bar">
+    <button class="back-btn" onclick="window.history.back()">
+        ⬅ Back
+    </button>
+</div>
+
+<div class="analysis-section">
+    <div class="card">
+        <h4>Total Transactions</h4>
+        <p>{{ analysis.total }}</p>
+    </div>
+
+    <div class="card fraud">
+        <h4>Fraud Transactions</h4>
+        <p>{{ analysis.fraud_count }}</p>
+    </div>
+
+    <div class="card safe">
+        <h4>Safe Transactions</h4>
+        <p>{{ analysis.safe_count }}</p>
+    </div>
+
+    <div class="card">
+        <h4>Fraud %</h4>
+        <p>{{ analysis.fraud_percentage }}%</p>
+    </div>
+
+    <div class="card">
+        <h4>Avg Risk Score</h4>
+        <p>{{ analysis.avg_risk }}</p>
+    </div>
+
+
+</div>
+<div class="charts-section">
+    <div class="chart-card">
+        <h4>Fraud vs Safe Transactions</h4>
+        <canvas id="fraudSafeChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h4>Fraud by Transaction Type</h4>
+        <canvas id="fraudTypeChart"></canvas>
+    </div>
+
+    <div class="chart-card full">
+        <h4>Risk Score Distribution</h4>
+        <canvas id="riskScoreChart"></canvas>
+    </div>
+</div>
+
+
+
+<div class="table-container">
+<table>
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Amount</th>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Prediction</th>
+            <th>Risk Score</th>
+            <th>Fraud Reasons</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rec in records %}
+        <tr>
+            <td data-label="Transaction ID">{{ rec.TransactionId }}</td>
+            <td data-label="Amount">{{ rec.Amount}}</td>
+            <td data-label="Sender">{{ rec.senderid }}</td>
+            <td data-label="Receiver">{{ rec.receiverid }}</td>
+            <td data-label="Prediction">
+                {% if rec.Prediction == "Fraud" %}
+                    <span class="fraud">Fraud</span>
+                {% else %}
+                    <span class="safe">Not Fraud</span>
+                {% endif %}
+            </td>
+
+            <td data-label="Risk Score">{{ "%.2f"|format(rec.FraudRiskScore) }}</td>
+            <td data-label="Fraud Reasons">{{ rec.FraudReasons }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>

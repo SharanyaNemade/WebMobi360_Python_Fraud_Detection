@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fraud Dashboard Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f6ff; }
+    .container { display: flex; gap: 40px; }
+    .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);}
+    canvas { width: 100% !important; height: 300px !important; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; border-bottom: 1px solid #ddd; text-align: center; }
+    th { background: #003f88; color: white; }
+  </style>
+</head>
+<body>
+
+  <h2>Fraud Detection Dashboard</h2>
+
+  <div class="container">
+
+    <!-- Fraud Trend Chart -->
+    <div class="card" style="flex: 2;">
+      <h3>Fraud Trend Over Time</h3>
+      <canvas id="fraudTrend"></canvas>
+    </div>
+
+    <!-- Risk Level Chart -->
+    <div class="card" style="flex: 1;">
+      <h3>Risk Level Distribution</h3>
+      <canvas id="riskPie"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Top Frauds -->
+  <div class="card" style="margin-top: 25px;">
+    <h3>Flagged Fraud Transactions</h3>
+    <table>
+      <tr><th>ID</th><th>Amount</th><th>Risk</th></tr>
+      <tr><td>TX101</td><td>₹95,000</td><td>High</td></tr>
+      <tr><td>TX250</td><td>₹48,000</td><td>High</td></tr>
+      <tr><td>TX442</td><td>₹10,000</td><td>Medium</td></tr>
+      <tr><td>TX521</td><td>₹20,500</td><td>Medium</td></tr>
+    </table>
+  </div>
+
+<script>
+// Sample data for charts
+const fraudCounts = [5, 8, 4, 10, 12, 6, 15]; // weekly fraud cases
+const riskData = [300, 45, 12]; // Low, Medium, High
+
+// Trend Chart
+new Chart(document.getElementById("fraudTrend"), {
+  type: "line",
+  data: {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [{
+      label: "Fraud Cases",
+      data: fraudCounts,
+      borderWidth: 2,
+      fill: true,
+    }]
+  }
+});
+
+// Pie Chart
+new Chart(document.getElementById("riskPie"), {
+  type: "pie",
+  data: {
+    labels: ["Low Risk", "Medium Risk", "High Risk"],
+    datasets: [{
+      data: riskData
+    }]
+  }
+});
+</script>
+
+</body>
+</html>

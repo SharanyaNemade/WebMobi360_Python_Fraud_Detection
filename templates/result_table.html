@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+
+    <h2 class="mb-3 text-primary">Fraud Detection Results</h2>
+
+    <div class="alert alert-info">
+        <strong>Total Transactions:</strong> {{ total }} <br>
+        <strong>Fraud Detected:</strong> {{ fraud_count }} <br>
+        <strong>Fraud Percentage:</strong> {{ fraud_percentage }}%
+    </div>
+
+    <h4>Prediction Table</h4>
+    {{ tables|safe }}
+
+    <a href="/upload_csv" class="btn btn-primary mt-3">Upload Another File</a>
+
+</body>
+</html>

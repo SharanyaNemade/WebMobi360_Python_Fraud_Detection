@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Fraud Analysis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f1f5f9;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: linear-gradient(90deg, #1e40af, #2563eb);
+    color: #fff;
+    padding: 18px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.back-btn {
+    background: #fff;
+    color: #2563eb;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 28px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+thead {
+    background: #e0e7ff;
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+th {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+.fraud {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.safe {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.view-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div style="display:flex; align-items:center; gap:16px;">
+        <h2>👤 Individual User Fraud Analysis</h2>
+
+        <input type="text"
+               id="userSearch"
+               placeholder="Search User ID..."
+               onkeyup="filterUsers()"
+               style="
+                    padding:8px 12px;
+                    border-radius:8px;
+                    border:none;
+                    outline:none;
+                    font-size:14px;
+                    width:220px;
+               ">
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='/analysis'">⬅ Back</button>
+</div>
+
+<div class="container">
+
+{% if not data %}
+    <p>No transaction history available.</p>
+{% else %}
+<table>
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Total Txns</th>
+            <th>Fraud</th>
+            <th>Safe</th>
+            <th>Avg Risk Score</th>
+            <th>Total Amount</th>
+            <th>Unique Receivers</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+        <tr>
+            <td>{{ row.user_id }}</td>
+            <td>{{ row.total_transactions }}</td>
+            <td class="fraud">{{ row.fraud_count }}</td>
+            <td class="safe">{{ row.safe_count }}</td>
+            <td>{{ row.avg_risk_score }}</td>
+            <td>{{ row.total_amount }}</td>
+            <td>{{ row.unique_receivers }}</td>
+            <td>
+                <button class="view-btn"
+                        onclick="window.location.href='/user-analysis/{{ row.user_id }}'">
+                    View
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
+<script>
+function filterUsers() {
+    const input = document.getElementById("userSearch").value.toUpperCase();
+    const table = document.querySelector("table");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        const userCell = rows[i].getElementsByTagName("td")[0];
+        if (!userCell) continue;
+
+        const userId = userCell.textContent || userCell.innerText;
+        rows[i].style.display = userId.toUpperCase().includes(input)
+            ? ""
+            : "none";
+    }
+}
+</script>
+
+</body>
+</html>

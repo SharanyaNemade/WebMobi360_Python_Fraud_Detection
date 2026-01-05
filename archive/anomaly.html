@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anomaly Detection Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
+    canvas {
+      background: white;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<h2>Anomaly Detection in Transactions</h2>
+
+<canvas id="anomalyChart" width="700" height="400"></canvas>
+
+<script>
+const ctx = document.getElementById('anomalyChart').getContext('2d');
+
+// Sample transaction amounts over 15 days
+const transactionData = [1000, 1200, 1100, 1050, 1300, 1150, 1400, 5000, 1250, 1100, 1350, 1500, 1600, 7000, 1300];
+
+// Highlight anomalies: > 3000 is unusual
+const pointColors = transactionData.map(value => value > 3000 ? 'red' : 'green');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: Array.from({length: transactionData.length}, (_, i) => `Day ${i+1}`),
+    datasets: [{
+      label: 'Transaction Amount',
+      data: transactionData,
+      borderColor: '#2563eb',
+      backgroundColor: 'rgba(37, 99, 235, 0.2)',
+      pointBackgroundColor: pointColors,
+      pointRadius: 6,
+      tension: 0.3
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Amount (₹)' }
+      },
+      x: {
+        title: { display: true, text: 'Days' }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

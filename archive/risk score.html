@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Scoring Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #003f88;
+      color: white;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Risk Score Colors */
+    .low { background-color: #d1fae5; color: #065f46; font-weight: bold; }
+    .medium { background-color: #fde68a; color: #b45309; font-weight: bold; }
+    .high { background-color: #fca5a5; color: #991b1b; font-weight: bold; }
+
+  </style>
+</head>
+<body>
+
+  <h2>Fraud Transaction Risk Scores</h2>
+
+  <table>
+    <tr>
+      <th>Transaction ID</th>
+      <th>Amount</th>
+      <th>Risk Score</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>TX101</td>
+      <td>₹50,000</td>
+      <td class="low">0.15</td>
+      <td class="low">Low 🟩</td>
+    </tr>
+    <tr>
+      <td>TX102</td>
+      <td>₹2,00,000</td>
+      <td class="medium">0.65</td>
+      <td class="medium">Medium 🟧</td>
+    </tr>
+    <tr>
+      <td>TX103</td>
+      <td>₹1,50,000</td>
+      <td class="high">0.92</td>
+      <td class="high">High 🟥</td>
+    </tr>
+    <tr>
+      <td>TX104</td>
+      <td>₹75,000</td>
+      <td class="medium">0.45</td>
+      <td class="medium">Medium 🟧</td>
+    </tr>
+  </table>
+
+</body>
+</html>

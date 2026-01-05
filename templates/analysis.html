@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fraud Detection Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ========== ROOT COLORS ========== */
+:root {
+    --primary: #1e40af;
+    --secondary: #2563eb;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --text-dark: #0f172a;
+    --text-light: #64748b;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ========== BASE ========== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+}
+
+/* ========== HEADER ========== */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.back-btn {
+    background: #fff;
+    color: var(--secondary);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #e0e7ff;
+    transform: translateY(-1px);
+}
+
+/* ========== CONTAINER ========== */
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 28px;
+}
+
+/* ========== EMPTY STATE ========== */
+.no-data {
+    background: #fff;
+    padding: 40px;
+    border-radius: 14px;
+    text-align: center;
+    color: var(--danger);
+    font-size: 18px;
+    box-shadow: var(--shadow);
+}
+
+/* ========== KPI SECTION ========== */
+.kpi-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+    margin-bottom: 36px;
+}
+
+.kpi {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.kpi:hover {
+    transform: translateY(-4px);
+}
+
+.kpi h4 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.kpi p {
+    margin-top: 14px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.kpi.total p { color: var(--secondary); }
+.kpi.fraud p { color: var(--danger); }
+.kpi.safe  p { color: var(--success); }
+
+/* ========== CHART GRID ========== */
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 28px;
+}
+
+.chart-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+}
+
+.chart-card h3 {
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+
+.user-btn {
+    background: #facc15;
+    color: #1e293b;
+}
+
+.user-btn:hover {
+    background: #fde047;
+}
+
+
+/* ========== FOOTER SPACING ========== */
+.spacer {
+    height: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <h2>📊 Fraud Detection Analytics Dashboard</h2>
+
+
+    <div style="display:flex; gap:12px;">
+        <button class="back-btn user-btn"
+                onclick="window.location.href='/user-analysis'">
+            👤 User Analysis
+        </button>
+
+        <button class="back-btn"
+                onclick="window.location.href='/home'">
+            ⬅ Home
+        </button>
+    </div>
+</div>
+
+
+
+<div class="container">
+
+{% if not data_available %}
+    <div class="no-data">
+        No prediction history available. Start running predictions to see analytics.
+    </div>
+{% else %}
+
+<!-- ===== KPI SECTION ===== -->
+<div class="kpi-section">
+    <div class="kpi total">
+        <h4>Total Transactions</h4>
+        <p>{{ total }}</p>
+    </div>
+
+    <div class="kpi fraud">
+        <h4>Fraud Transactions</h4>
+        <p>{{ fraud_count }}</p>
+    </div>
+
+    <div class="kpi safe">
+        <h4>Safe Transactions</h4>
+        <p>{{ safe_count }}</p>
+    </div>
+</div>
+
+<!-- ===== CHARTS ===== -->
+<div class="chart-grid">
+
+    <div class="chart-card">
+        <h3>📈 Risk Score Trend (Recent)</h3>
+        <canvas id="probTrend"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>📊 Fraud by Transaction Type</h3>
+        <canvas id="fraudTypeBar"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h3>🧠 Fraud vs Safe Distribution</h3>
+        <canvas id="fraudPie"></canvas>
+    </div>
+
+</div>
+
+{% endif %}
+
+<div class="spacer"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+{% if data_available %}
+
+new Chart(document.getElementById('probTrend'), {
+    type: 'line',
+    data: {
+        labels: {{ timestamps | tojson }},
+        datasets: [{
+            label: "Risk Score",
+            data: {{ prob_trend | tojson }},
+            borderColor: "#2563eb",
+            backgroundColor: "rgba(37,99,235,0.1)",
+            tension: 0.4,
+            fill: true
+        }]
+    }
+});
+
+new Chart(document.getElementById('fraudTypeBar'), {
+    type: 'bar',
+    data: {
+        labels: {{ fraud_by_type.keys() | list | tojson }},
+        datasets: [{
+            label: "Fraud Count",
+            data: {{ fraud_by_type.values() | list | tojson }},
+            backgroundColor: "#dc2626"
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+new Chart(document.getElementById('fraudPie'), {
+    type: 'doughnut',
+    data: {
+        labels: ["Safe", "Fraud"],
+        datasets: [{
+            data: [{{ safe_count }}, {{ fraud_count }}],
+            backgroundColor: ["#16a34a", "#dc2626"]
+        }]
+    }
+});
+
+{% endif %}
+</script>
+
+</body>
+</html>

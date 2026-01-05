@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Tools Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #003f88;
+      color: white;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn:hover {
+      background-color: #1e40af;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Compliance Panel</h2>
+
+<div class="panel">
+  <table>
+    <tr>
+      <th>Transaction ID</th>
+      <th>Flagged At</th>
+      <th>Analyst</th>
+      <th>Notes</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>TX101</td>
+      <td>2025-11-27 10:15</td>
+      <td>Ramyasree</td>
+      <td>High risk due to sudden location change</td>
+      <td>Reviewed</td>
+    </tr>
+    <tr>
+      <td>TX102</td>
+      <td>2025-11-27 11:05</td>
+      <td>Vikram</td>
+      <td>Multiple login failures detected</td>
+      <td>Pending</td>
+    </tr>
+    <tr>
+      <td>TX103</td>
+      <td>2025-11-27 12:30</td>
+      <td>Ananya</td>
+      <td>Large unusual transaction amount</td>
+      <td>Reviewed</td>
+    </tr>
+  </table>
+
+  <button class="btn" onclick="alert('Exporting report...')">Export Report (CSV/PDF)</button>
+</div>
+
+</body>
+</html>

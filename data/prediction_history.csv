@@ -1,0 +1,11 @@
+Timestamp,TransactionId,Type,Amount,oldbalanceOrg,newbalanceOrig,oldbalanceDest,newbalanceDest,IsSuccessful,SenderLocation,ReceiverLocation,AmountAnomalyFlag,BehaviorAnomalyFlag,FraudReasons,Prediction,RiskScore,SourceType,BatchID,SourceFile
+01-12-2025 23:31,TXN2001164,CASH_OUT,1396.27,45894.52,44498.25,7215.45,8611.72,1,Delhi,Chennai,0,0,Sender and receiver locations do not match,Fraud,0.553,CSV,CSV_e05373c2,samp.csv
+04-12-2025 23:22,TXN2001836,CASH_OUT,691.18,3411.06,2719.89,15474.23,16165.41,1,Lucknow,Bangalore,0,0,"Sender and receiver locations do not match, Balance mismatch detected after transaction",Fraud,0.649,CSV,CSV_e05373c2,samp.csv
+06-12-2025 19:14,TXN1000121,TRANSFER,7826.51,13930.24,6103.73,14560.2,22386.71,1,Kolkata,Kolkata,0,0,No strong fraud indicators detected,Not Fraud,0.002,CSV,CSV_e05373c2,samp.csv
+09-12-2025 20:35,TXN1000986,TRANSFER,3964.26,31150.62,27186.36,4132.83,8097.09,1,Kolkata,Mumbai,0,0,Sender and receiver locations do not match,Not Fraud,0.056,CSV,CSV_d851e984,samp.csv
+16-11-2025 22:13,TXN2001066,TRANSFER,118.74,18114.22,17995.48,17660.35,17779.08,1,Bangalore,Hyderabad,0,0,"Sender and receiver locations do not match, Balance mismatch detected after transaction",Fraud,0.645,CSV,CSV_210e3fab,samp.csv
+18-11-2025 22:09,TXN2001998,CASH_OUT,21051.8,31214.23,10162.42,4176.29,25228.09,1,Jaipur,Jaipur,0,0,Balance mismatch detected after transaction,Not Fraud,0.5,MANUAL,MANUAL,
+22-11-2025 05:52,TXN2001343,TRANSFER,46115.87,10777.42,-35338.45,18698.11,64813.98,1,Chennai,Chennai,0,0,No strong fraud indicators detected,Not Fraud,0.027,CSV,CSV_210e3fab,samp.csv
+25-11-2025 18:46,TXN1000852,TRANSFER,7958.68,38632.92,30674.24,815.99,8774.67,1,Hyderabad,Bangalore,0,0,Sender and receiver locations do not match,Not Fraud,0.056,CSV,CSV_e05373c2,samp.csv
+26-11-2025 19:48,TXN1000439,PAYMENT,6866.85,9123.43,2256.58,12164.22,19031.07,1,Jaipur,Jaipur,0,0,No strong fraud indicators detected,Not Fraud,0.001,CSV,CSV_d851e984,samp.csv
+29-11-2025 17:48,TXN1000398,TRANSFER,5516.36,3097.16,-2419.2,14913.92,20430.28,1,Kolkata,Kolkata,0,0,No strong fraud indicators detected,Not Fraud,0.002,CSV,CSV_e05373c2,samp.csv

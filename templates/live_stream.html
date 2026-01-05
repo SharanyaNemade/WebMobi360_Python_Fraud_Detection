@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Transaction Stream</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f4f7fb;
+            padding: 30px;
+        }
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: red;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            max-width: 900px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #0078ff;
+            color: white;
+        }
+        .fraud { color: red; font-weight: bold; }
+        .safe { color: green; font-weight: bold; }
+
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        .toast {
+            background: #dc2626;
+            color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+.top-bar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.back-btn {
+    background: #0078ff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.back-btn:hover {
+    background: #005fcc;
+}
+
+    </style>
+</head>
+
+<body>
+
+<div id="alert-container"></div>
+
+<h2>
+    <span class="dot"></span>
+    Live Transaction Streaming
+</h2>
+<div class="top-bar">
+    <button class="back-btn" onclick="window.location.href='/home'">
+        ⬅ Back
+    </button>
+</div>
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Prediction</th>
+                <th>Risk %</th>
+                <th>Reasons</th>
+            </tr>
+        </thead>
+        <tbody id="liveTableBody"></tbody>
+    </table>
+</div>
+
+<script>
+const socket = io('/live');
+
+/* 📊 ALL TRANSACTIONS */
+socket.on('live_tx', (data) => {
+    const tbody = document.getElementById("liveTableBody");
+
+    const row = `
+        <tr>
+            <td>${data.TransactionId}</td>
+            <td>₹ ${data.Amount.toLocaleString()}</td>
+            <td class="${data.Prediction === 'Fraud' ? 'fraud' : 'safe'}">
+                ${data.Prediction}
+            </td>
+            <td>${Number(data.FraudRiskScore).toFixed(2)}%</td>
+            <td>${data.Reason}</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML("afterbegin", row);
+
+    if (tbody.rows.length > 15) tbody.deleteRow(15);
+});
+
+/* 🚨 FRAUD ALERT ONLY */
+socket.on('fraud_alert', (data) => {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerHTML = `
+        <strong>⚠ FRAUD DETECTED</strong><br>
+        ID: ${data.TransactionId}<br>
+        Risk: ${data.FraudRiskScore.toFixed(2)}%<br>
+        <small>${data.Reason}</small>
+    `;
+    document.getElementById("alert-container").appendChild(toast);
+
+    setTimeout(() => toast.remove(), 5000);
+});
+</script>
+
+
+</body>
+</html>
