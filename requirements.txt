@@ -1,11 +1,12 @@
 flask
 flask-socketio
-# eventlet
 pandas
 scikit-learn
 numpy
 joblib
-# kafka-python
+kafka-python
 mysql-connector-python
 requests
 python-dateutil
+gunicorn
+eventlet
