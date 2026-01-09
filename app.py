@@ -13,10 +13,12 @@ from flask_socketio import SocketIO, emit
 
 
 # ---------------- LOAD MODEL ----------------
-# model = joblib.load("model/fraud_detect_model.pkl")
-# preprocess = pickle.load(open("model/preprocess.pkl", "rb"))
+model = joblib.load("model/fraud_detect_model.pkl")
+preprocess = pickle.load(open("model/preprocess.pkl", "rb"))
 
-# app = Flask(__name__)
+app = Flask(__name__)
+
+
 # app.config["UPLOAD_FOLDER"] = "uploads"
 
 
@@ -52,15 +54,17 @@ socketio = SocketIO(
 
 
 # 🔥 runs once when app starts
-# init_database()
+init_database()
 
 # Load CSV data if needed
-# import_transaction_history_if_needed()
+import_transaction_history_if_needed()
 
 
 
 
-@app.before_first_request
+# @app.before_first_request
+
+
 def startup_tasks():
     init_database()
     import_transaction_history_if_needed()
@@ -463,13 +467,8 @@ def predict_csv():
         # REPLACED
 
 
+import os
 if __name__ == "__main__":
-    socketio.run(
-        app,
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8000)),
-        debug=False
-    )
-
-
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=8000)
 
